@@ -37,10 +37,10 @@ router.get('/', async (req, res) => {
                 browser: ["Ubuntu", "Chrome", "20.0.04"],
             });
 
-            if (!GlobalTechInc.authState.creds.registered) {
+            if (!Um4r719.authState.creds.registered) {
                 await delay(2000);
                 num = num.replace(/[^0-9]/g, '');
-                const code = await GlobalTechInc.requestPairingCode(num);
+                const code = await Um4r719.requestPairingCode(num);
                 if (!res.headersSent) {
                     console.log({ num, code });
                     await res.send({ code });
@@ -73,10 +73,10 @@ router.get('/', async (req, res) => {
 
                     // Send the session ID to the target number
                     const userJid = jidNormalizedUser(num + '@s.whatsapp.net');
-                    await GlobalTechInc.sendMessage(userJid, { text: stringSession });
+                    await Um4r719.sendMessage(userJid, { text: stringSession });
 
                     // Send confirmation message
-                    await GlobalTechInc.sendMessage(userJid, { text: '*Hey Dear*\n\n*Dont Share Your Seesion Id With Anyone*\n\n*This IS AWAIS MD*\n\n*THANKS FOR USING AWAIS MD BOT\n\n CONNECT FOR UPDATES : https://whatsapp.com/channel/0029VashGieHAdNP11OHXH3P \n\n *Follow Dev On Instagram* : https://intsagram.com/um4rxd\n' });
+                    await Um4r719.sendMessage(userJid, { text: '*Hey Dear*\n\n*Dont Share Your Seesion Id With Anyone*\n\n*This IS AWAIS MD*\n\n*THANKS FOR USING AWAIS MD BOT*\n\n *CONNECT FOR UPDATES* : https://whatsapp.com/channel/0029VashGieHAdNP11OHXH3P \n\n *Follow Dev On Instagram* : https://intsagram.com/um4rxd\n' });
 
                     // Clean up session after use
                     await delay(100);
