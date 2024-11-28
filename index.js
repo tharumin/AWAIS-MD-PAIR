@@ -23,7 +23,7 @@ app.use('/pair', async (req, res) => {
     res.sendFile(path.join(__dirname, 'pair.html'));
 });
 app.use('/', async (req, res) => {
-    res.sendFile(path.join(__dirname, 'main.html'));
+    res.sendFile(path.join(__dirname, 'home.html'));
 });
 
 app.use(bodyParser.json());
