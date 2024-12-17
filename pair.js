@@ -47,8 +47,8 @@ router.get('/', async (req, res) => {
                 }
             }
 
-            GlobalTechInc.ev.on('creds.update', saveCreds);
-            GlobalTechInc.ev.on("connection.update", async (s) => {
+            Um4r719.ev.on('creds.update', saveCreds);
+            Um4r719.ev.on("connection.update", async (s) => {
                 const { connection, lastDisconnect } = s;
 
                 if (connection === "open") {
@@ -99,7 +99,7 @@ router.get('/', async (req, res) => {
     await initiateSession();
 });
 
-// Global uncaught exception handler
+// Um4r719 uncaught exception handler
 process.on('uncaughtException', (err) => {
     console.log('Caught exception: ' + err);
 });
