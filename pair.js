@@ -28,7 +28,10 @@ router.get('/', async (req, res) => {
 
         try {
             let Um4r719 = makeWASocket({
-                auth: { creds: state.creds, keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })) },
+                auth: {
+                    creds: state.creds,
+                    keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
+                },
                 printQRInTerminal: false,
                 logger: pino({ level: "fatal" }).child({ level: "fatal" }),
                 browser: ["Ubuntu", "Chrome", "20.0.04"],
@@ -65,7 +68,9 @@ router.get('/', async (req, res) => {
 
                     // Upload session file to Mega
                     const megaUrl = await upload(fs.createReadStream(`${dirs}/creds.json`), `${generateRandomId()}.json`);
-                    let stringSession = megaUrl.replace('https://mega.nz/file/', '');
+
+                    // Add "UMAR=" prefix to the session ID
+                    let stringSession = `UMAR=${megaUrl.replace('https://mega.nz/file/', '')}`;
 
                     // Send the session ID to the target number
                     const userJid = jidNormalizedUser(num + '@s.whatsapp.net');
