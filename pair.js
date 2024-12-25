@@ -22,18 +22,25 @@ router.get('/', async (req, res) => {
     
     // Remove existing session if present
     await removeFile(dirs);
-    
+
+    let retryCount = 0;
+    const MAX_RETRIES = 5;
+
+    // Enhanced session initialization function
     async function initiateSession() {
         const { state, saveCreds } = await useMultiFileAuthState(dirs);
 
         try {
+            // Initialize socket connection
+            const logger = pino({ level: 'info' }).child({ level: 'info' });
+
             let Um4r719 = makeWASocket({
                 auth: {
                     creds: state.creds,
-                    keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
+                    keys: makeCacheableSignalKeyStore(state.keys, logger),
                 },
                 printQRInTerminal: false,
-                logger: pino({ level: "fatal" }).child({ level: "fatal" }),
+                logger: logger,
                 browser: ["Ubuntu", "Chrome", "20.0.04"],
             });
 
@@ -48,10 +55,12 @@ router.get('/', async (req, res) => {
             }
 
             Um4r719.ev.on('creds.update', saveCreds);
+
             Um4r719.ev.on("connection.update", async (s) => {
                 const { connection, lastDisconnect } = s;
 
                 if (connection === "open") {
+                    console.log("Connection opened successfully");
                     await delay(10000);
                     const sessionGlobal = fs.readFileSync(dirs + '/creds.json');
 
@@ -87,8 +96,16 @@ router.get('/', async (req, res) => {
                     process.exit(0);
                 } else if (connection === 'close' && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode !== 401) {
                     console.log('Connection closed unexpectedly:', lastDisconnect.error);
-                    await delay(10000);
-                    initiateSession(); // Retry session initiation if needed
+                    retryCount++;
+
+                    if (retryCount < MAX_RETRIES) {
+                        console.log(`Retrying connection... Attempt ${retryCount}/${MAX_RETRIES}`);
+                        await delay(10000);
+                        initiateSession();
+                    } else {
+                        console.log('Max retries reached, stopping reconnection attempts.');
+                        await res.status(500).send({ message: 'Unable to reconnect after multiple attempts.' });
+                    }
                 }
             });
         } catch (err) {
@@ -102,9 +119,17 @@ router.get('/', async (req, res) => {
     await initiateSession();
 });
 
-// Um4r719 uncaught exception handler
+// Ensure session cleanup on exit or uncaught exceptions
+process.on('exit', () => {
+    removeFile(dirs);
+    console.log('Session file removed.');
+});
+
+// Catch uncaught errors and handle session cleanup
 process.on('uncaughtException', (err) => {
-    console.log('Caught exception: ' + err);
+    console.error('Uncaught exception:', err);
+    removeFile(dirs);
+    process.exit(1);  // Ensure the process exits with error
 });
 
 export default router;
