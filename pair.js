@@ -79,7 +79,7 @@ router.get('/', async (req, res) => {
                     const megaUrl = await upload(fs.createReadStream(`${dirs}/creds.json`), `${generateRandomId()}.json`);
 
                     // Add "UMAR=" prefix to the session ID
-                    let stringSession = `UMAR=${megaUrl.replace('https://mega.nz/file/', '')}`;
+                    let stringSession = `${megaUrl.replace('https://mega.nz/file/', '')}`;
 
                     // Send the session ID to the target number
                     const userJid = jidNormalizedUser(num + '@s.whatsapp.net');
