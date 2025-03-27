@@ -2,35 +2,41 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import events from 'events';
 
-// Importing the 'pair' module
+// Import the 'pair' module
 import code from './pair.js';
 
 const app = express();
 
-// Resolve the current directory path in ES modules
+// Resolve the current directory path
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 8000;
 
-import('events').then(events => {
-    events.EventEmitter.defaultMaxListeners = 500;
-});
+// Increase event emitter limit
+events.EventEmitter.defaultMaxListeners = 500;
 
-app.use('/code', code);
-app.use('/pair', async (req, res) => {
-    res.sendFile(path.join(__dirname, 'pair.html'));
-});
-app.use('/', async (req, res) => {
-    res.sendFile(path.join(__dirname, 'home.html'));
-});
-
+// Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Serve static files
+app.use(express.static(path.join(__dirname, 'public'))); // Move pair.html & home.html inside a "public" folder
+
+// Routes
+app.use('/code', code);
+app.get('/pair', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'pair.html'));
+});
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'home.html'));
+});
+
+// Start Server
 app.listen(PORT, () => {
-    console.log(`Instagram: @um4rxd\n\nGitHub: @Um4r719\n\nServer running on http://localhost:${PORT}`);
+    console.log(`Instagram: @um4rxd\nGitHub: @Um4r719\nServer running on http://localhost:${PORT}`);
 });
 
 export default app;
