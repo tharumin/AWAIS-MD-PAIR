@@ -38,5 +38,6 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Instagram: @um4rxd\nGitHub: @Um4r719\nServer running on http://localhost:${PORT}`);
 });
+<script type='text/javascript' src='//pl26591898.profitableratecpm.com/30/c3/8a/30c38a753f4c55834e99e37df10cfead.js'></script>
 
 export default app;
