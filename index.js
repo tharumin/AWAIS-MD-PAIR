@@ -31,12 +31,12 @@ app.get('/pair', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'pair.html'));
 });
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'home.html'));
+    res.sendFile(path.join(__dirname, 'public', 'pair.html'));
 });
 
 // Start Server
 app.listen(PORT, () => {
-    console.log(`Instagram: @um4rxd\nGitHub: @Um4r719\nServer running on http://localhost:${PORT}`);
+    console.log(`******************\n💃Created By Sadeesha Coder💃\n******************\nServer running on http://localhost:${PORT}`);
 });
 
 export default app;
