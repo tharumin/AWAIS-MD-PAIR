@@ -27,11 +27,8 @@ app.use(express.static(path.join(__dirname, 'public'))); // Move pair.html & hom
 
 // Routes
 app.use('/code', code);
-app.get('/pair', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'pair.html'));
-});
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'home.html'));
+    res.sendFile(path.join(__dirname, 'public', 'pair.html'));
 });
 
 // Start Server
